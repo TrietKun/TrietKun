@@ -358,9 +358,9 @@ class UIController {
       }
     );
 
-    // Text scramble on labels and headings when entering a screen
+    // Text scramble on section titles only (not hub card labels — those should be instant-readable)
     const scrambleTargets = screen.querySelectorAll(
-      '.hub-card-label, .section-label, .section-title, .scene-label'
+      '.section-title, .scene-label'
     );
     if (scrambleTargets.length > 0) {
       TextScramble.scrambleElements(Array.from(scrambleTargets), 150);
