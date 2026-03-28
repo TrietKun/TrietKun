@@ -3318,3 +3318,42 @@ html, body {
   0%, 100% { transform: scaleY(0.4); }
   50% { transform: scaleY(1); }
 }
+
+/* ============================================
+   GLOBAL INTERACTIVE FIX — ensures all buttons,
+   cards, links are ALWAYS clickable/tappable
+   regardless of parent pointer-events
+   ============================================ */
+button,
+a,
+.nav-item,
+.nav-logo,
+.hub-card,
+.project-card,
+.project-card-inner,
+.skill-node,
+.cta-button,
+.back-button,
+.scene-dot,
+.about-prev-btn,
+.about-next-btn,
+.about-controls,
+.about-scene-nav,
+.about-scene.active,
+.project-detail-close,
+.pd-link,
+.pd-tech-tag,
+.pd-arch-node,
+.terminal-input,
+.intro-content,
+.intro-cta,
+.hub-content,
+.hub-grid,
+.section-content,
+.projects-grid,
+.skills-grid,
+.about-experience,
+#sound-toggle,
+#nav {
+  pointer-events: auto !important;
+}
