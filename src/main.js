@@ -265,16 +265,6 @@ class Experience {
         }
       );
 
-      // Text scramble decode on each intro line after they appear
-      introLines.forEach((line, i) => {
-        const scramble = new TextScramble();
-        const text = line.textContent;
-        line.textContent = '';
-        setTimeout(() => {
-          scramble.animate(line, text, 1400);
-        }, 600 + i * 300);
-      });
-
       gsap.fromTo(subtitle,
         { y: 30, opacity: 0, letterSpacing: '12px', filter: 'blur(8px)' },
         {
@@ -287,16 +277,6 @@ class Experience {
           delay: 0.7,
         }
       );
-
-      // Scramble subtitle too
-      {
-        const scramble = new TextScramble();
-        const text = subtitle.textContent;
-        subtitle.textContent = '';
-        setTimeout(() => {
-          scramble.animate(subtitle, text, 1800);
-        }, 1200);
-      }
 
       gsap.fromTo(cta,
         { y: 25, opacity: 0, filter: 'blur(6px)' },
