@@ -62,7 +62,7 @@ class SceneEnvironment {
       fog.position.z = -8 - i * 4;
       fog.position.y = -2 + i * 0.5;
       fog.rotation.x = -0.2;
-      fog.material.uniforms.uOpacity.value = 0.06 - i * 0.015;
+      fog.material.uniforms.uOpacity.value = 0.1 - i * 0.02;
       this.scene.add(fog);
       this.objects.push({ mesh: fog, type: 'fog' });
     }
@@ -108,7 +108,7 @@ class SceneEnvironment {
           uTime: { value: 0 },
           uColor: { value: primaryColor },
           uColor2: { value: secondaryColor },
-          uAlpha: { value: 0.07 + Math.random() * 0.05 },
+          uAlpha: { value: 0.12 + Math.random() * 0.06 },
           uHover: { value: 0 },
           uGlitch: { value: 0 },
         },
@@ -165,7 +165,7 @@ class SceneEnvironment {
           vec2 grid = abs(fract(vWorldPos.xz * 0.5) - 0.5);
           float line = min(grid.x, grid.y);
           float gridAlpha = 1.0 - smoothstep(0.0, 0.03, line);
-          gridAlpha *= 0.04;
+          gridAlpha *= 0.07;
 
           float dist = length(vWorldPos.xz);
           float fade = smoothstep(15.0, 5.0, dist);
@@ -207,7 +207,7 @@ class SceneEnvironment {
           i / 4
         ),
         transparent: true,
-        opacity: 0.03 - i * 0.003,
+        opacity: 0.06 - i * 0.005,
         depthWrite: false,
       });
 
