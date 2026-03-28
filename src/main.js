@@ -165,129 +165,60 @@ class Experience {
     const loader = document.getElementById('loader');
     const pp = this.postProcessing;
 
-    // --- CINEMATIC INTRO SEQUENCE ---
+    // --- ELEGANT INTRO SEQUENCE ---
 
-    // 1. Fade out loader with exposure flash
+    // 1. Smooth loader fade
     gsap.to(loader, {
       opacity: 0,
-      duration: 0.8,
+      duration: 1.0,
       ease: 'power2.inOut',
-      onComplete: () => {
-        loader.classList.add('hidden');
-        loader.style.display = 'none';
-      },
+      onComplete: () => { loader.style.display = 'none'; },
     });
 
-    // 2. Start from darkness, flash up
+    // 2. Gentle rise from darkness
     pp.exposure.value = 0;
-    gsap.to(pp.exposure, {
-      value: 1.4,  // brief overexposure flash
-      duration: 1.0,
-      ease: 'power2.out',
-      delay: 0.3,
-    });
-    gsap.to(pp.exposure, {
-      value: 1.0,  // settle to baseline
-      duration: 1.5,
-      ease: 'expo.out',
-      delay: 1.3,
-    });
+    gsap.to(pp.exposure, { value: 1.0, duration: 2.0, ease: 'power2.out', delay: 0.3 });
 
-    // 3. Bloom surge on entrance
-    pp.bloomStrength.value = 1.2;
-    gsap.to(pp.bloomStrength, {
-      value: 0.5,
-      duration: 2.5,
-      ease: 'expo.out',
-      delay: 0.5,
-    });
+    // 3. Soft bloom
+    pp.bloomStrength.value = 0.8;
+    gsap.to(pp.bloomStrength, { value: 0.5, duration: 2.5, ease: 'power2.out', delay: 0.5 });
 
-    // 4. CA sweep
-    pp.chromaticAberration.value = 0.02;
-    gsap.to(pp.chromaticAberration, {
-      value: 0.003,
-      duration: 2.0,
-      ease: 'expo.out',
-      delay: 0.8,
-    });
+    // 4. Show UI
+    gsap.delayedCall(0.8, () => this.ui.show());
 
-    // 5. Initial glitch burst (post-process + particles)
-    pp.setGlitch(0.6);
-    this.particles.material.uniforms.uGlitch.value = 0.8;
-    gsap.delayedCall(0.15, () => pp.setGlitch(0.3));
-    gsap.delayedCall(0.3, () => pp.setGlitch(0.1));
-    gsap.delayedCall(0.5, () => pp.setGlitch(0));
-    gsap.to(this.particles.material.uniforms.uGlitch, {
-      value: 0,
-      duration: 1.0,
-      ease: 'expo.out',
-      delay: 0.2,
-    });
+    // 5. Particles expand in gracefully
+    gsap.to(this.particles.transitionValue, { value: 1, duration: 4, ease: 'power3.out' });
 
-    // 6. Show UI
-    gsap.delayedCall(0.6, () => {
-      this.ui.show();
-    });
+    // 6. Gentle dolly
+    gsap.to(this.camera.position, { z: 10, y: 0.3, duration: 4.5, ease: 'power3.out' });
 
-    // 7. Particles expand in
-    gsap.to(this.particles.transitionValue, {
-      value: 1,
-      duration: 3.5,
-      ease: 'expo.out',
-    });
-
-    // 8. Dramatic dolly push (camera moves forward significantly)
-    gsap.to(this.camera.position, {
-      z: 10,
-      y: 0.3,
-      duration: 4,
-      ease: 'expo.out',
-    });
-
-    // 9. Animate intro text — blur-to-sharp cinematic reveal + text scramble
-    gsap.delayedCall(1.0, () => {
+    // 7. Elegant text reveal — smooth fade + rise, no scramble
+    gsap.delayedCall(1.2, () => {
       const introLines = document.querySelectorAll('.intro-line');
+      const greeting = document.getElementById('greeting');
       const subtitle = document.querySelector('.intro-subtitle');
       const cta = document.querySelector('.intro-cta');
 
-      // Blur-to-sharp with dramatic stagger
+      if (greeting) {
+        gsap.fromTo(greeting,
+          { y: 15, opacity: 0 },
+          { y: 0, opacity: 0.6, duration: 1.2, ease: 'power3.out' }
+        );
+      }
+
       gsap.fromTo(introLines,
-        { y: 80, opacity: 0, skewY: 5, scale: 0.96, filter: 'blur(12px)' },
-        {
-          y: 0,
-          opacity: 1,
-          skewY: 0,
-          scale: 1,
-          filter: 'blur(0px)',
-          duration: 1.8,
-          ease: 'expo.out',
-          stagger: 0.25,
-        }
+        { y: 40, opacity: 0, filter: 'blur(6px)' },
+        { y: 0, opacity: 1, filter: 'blur(0px)', duration: 1.4, ease: 'power3.out', stagger: 0.2 }
       );
 
       gsap.fromTo(subtitle,
-        { y: 30, opacity: 0, letterSpacing: '12px', filter: 'blur(8px)' },
-        {
-          y: 0,
-          opacity: 1,
-          letterSpacing: '4px',
-          filter: 'blur(0px)',
-          duration: 1.6,
-          ease: 'expo.out',
-          delay: 0.7,
-        }
+        { y: 20, opacity: 0 },
+        { y: 0, opacity: 1, duration: 1.2, ease: 'power3.out', delay: 0.6 }
       );
 
       gsap.fromTo(cta,
-        { y: 25, opacity: 0, filter: 'blur(6px)' },
-        {
-          y: 0,
-          opacity: 1,
-          filter: 'blur(0px)',
-          duration: 1.4,
-          ease: 'expo.out',
-          delay: 1.2,
-        }
+        { y: 15, opacity: 0 },
+        { y: 0, opacity: 1, duration: 1.0, ease: 'power3.out', delay: 1.0 }
       );
     });
   }
@@ -416,45 +347,4 @@ new Experience();
   }
 })();
 
-// =============================================
-// Cursor Sparkle Trail — spawns sparkles on mouse move
-// =============================================
-(function initCursorSparkles() {
-  const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
-  if (isTouchDevice) return;
-
-  let lastSparkleTime = 0;
-  const minInterval = 80; // ms between sparkles
-  const maxSparkles = 15;
-  const sparkles = [];
-
-  window.addEventListener('mousemove', (e) => {
-    const now = Date.now();
-    if (now - lastSparkleTime < minInterval) return;
-    lastSparkleTime = now;
-
-    const sparkle = document.createElement('div');
-    sparkle.className = 'cursor-sparkle';
-    sparkle.style.left = e.clientX + 'px';
-    sparkle.style.top = e.clientY + 'px';
-    sparkle.style.setProperty('--spark-dx', (Math.random() * 40 - 20) + 'px');
-    sparkle.style.setProperty('--spark-dy', (Math.random() * 40 - 20) + 'px');
-    sparkle.style.width = (2 + Math.random() * 3) + 'px';
-    sparkle.style.height = sparkle.style.width;
-    document.body.appendChild(sparkle);
-    sparkles.push(sparkle);
-
-    // Cleanup
-    setTimeout(() => {
-      sparkle.remove();
-      const idx = sparkles.indexOf(sparkle);
-      if (idx > -1) sparkles.splice(idx, 1);
-    }, 800);
-
-    // Limit total sparkles
-    while (sparkles.length > maxSparkles) {
-      sparkles[0].remove();
-      sparkles.shift();
-    }
-  });
-})();
+// (cursor sparkle trail removed — not elegant enough)

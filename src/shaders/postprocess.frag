@@ -106,33 +106,29 @@ void main() {
   color *= uExposure;
 
   // =============================================
-  // VIGNETTE
+  // VIGNETTE (softer, more elegant)
   // =============================================
   float vigDist = length(vUv - 0.5);
-  color *= 1.0 - smoothstep(0.3, 1.4, vigDist * uVignetteIntensity) * 0.95;
+  color *= 1.0 - smoothstep(0.4, 1.5, vigDist * uVignetteIntensity) * 0.8;
 
   float lum = dot(color, vec3(0.299, 0.587, 0.114));
 
   // =============================================
-  // FILM GRAIN (only in lit areas)
+  // VERY SUBTLE FILM GRAIN (barely visible)
   // =============================================
-  float noise = (random(vUv * uTime * 0.01 + 0.5) - 0.5) * uNoiseIntensity;
-  color += noise * smoothstep(0.0, 0.08, lum);
+  float noise = (random(vUv * uTime * 0.01 + 0.5) - 0.5) * uNoiseIntensity * 0.5;
+  color += noise * smoothstep(0.0, 0.1, lum);
+
+  // (scanlines removed — too harsh)
 
   // =============================================
-  // SCANLINES (subtle)
+  // ELEGANT COLOR TINT (cool shadows, warm highlights)
   // =============================================
-  color -= sin(vUv.y * uResolution.y * 0.8) * 0.012 * smoothstep(0.0, 0.1, lum);
+  color.b += smoothstep(0.0, 0.2, lum) * (1.0 - smoothstep(0.2, 0.5, lum)) * 0.008;
+  color.r += smoothstep(0.6, 1.0, lum) * 0.004;
 
-  // =============================================
-  // SHADOW / HIGHLIGHT TINT
-  // =============================================
-  float shadowMask = smoothstep(0.0, 0.15, lum) * (1.0 - smoothstep(0.15, 0.5, lum));
-  color.b += shadowMask * 0.01;
-  color.r += smoothstep(0.5, 1.0, lum) * 0.005;
-
-  // Crush blacks
-  color = max(color - 0.005, 0.0);
+  // Soft black floor
+  color = max(color - 0.003, 0.0);
 
   gl_FragColor = vec4(color, 1.0);
 }

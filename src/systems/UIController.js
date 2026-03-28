@@ -177,16 +177,10 @@ class UIController {
   }
 
   /**
-   * The big one — orchestrates the full cinematic transition:
-   *
-   * Phase 1 (0.0s): Glitch burst + CA spike + bloom burst
-   * Phase 2 (0.1s): Exposure dip toward black, old screen fades
-   * Phase 3 (0.6s): Exposure recovers, new screen fades in
-   * Phase 4 (0.8s): Elements stagger in with dramatic motion
-   * Phase 5 (1.4s): Post-process settles to resting values
+   * Elegant smooth transition — no glitch, no harsh exposure dip.
+   * Gentle crossfade with blur, soft bloom pulse, graceful element reveals.
    */
   _cinematicTransition(from, to) {
-    // Kill any in-progress transition timeline
     if (this.transitionTl) this.transitionTl.kill();
     this.transitionTl = gsap.timeline();
 
@@ -194,143 +188,56 @@ class UIController {
     const fromScreen = this.screens[from];
     const toScreen = this.screens[to];
 
-    // --- PHASE 1: Glitch + CA spike + Bloom burst (instant) ---
-    this.transitionTl.call(() => {
-      pp.setGlitch(1.2);
-    }, [], 0);
+    // --- Subtle bloom pulse ---
+    this.transitionTl.to(pp.bloomStrength, { value: 0.8, duration: 0.4, ease: 'power2.in' }, 0);
+    this.transitionTl.to(pp.bloomStrength, { value: 0.5, duration: 1.0, ease: 'expo.out' }, 0.5);
 
-    // Particle glitch burst + warp
-    if (this.particles) {
-      this.transitionTl.to(this.particles.material.uniforms.uGlitch, {
-        value: 1.0,
-        duration: 0.15,
-        ease: 'power4.in',
-      }, 0);
-      this.transitionTl.to(this.particles.material.uniforms.uGlitch, {
-        value: 0,
-        duration: 0.8,
-        ease: 'expo.out',
-      }, 0.25);
+    // --- Gentle vignette tighten + release ---
+    this.transitionTl.to(pp.vignetteIntensity, { value: 2.8, duration: 0.4, ease: 'power2.in' }, 0);
+    this.transitionTl.to(pp.vignetteIntensity, { value: 2.2, duration: 1.0, ease: 'expo.out' }, 0.5);
 
-      // Warp speed lines effect
-      this.transitionTl.to(this.particles.material.uniforms.uWarp, {
-        value: 0.8,
-        duration: 0.25,
-        ease: 'power3.in',
-      }, 0);
-      this.transitionTl.to(this.particles.material.uniforms.uWarp, {
-        value: 0,
-        duration: 1.0,
-        ease: 'expo.out',
-      }, 0.35);
-    }
+    // --- Soft exposure dip (not to black, just dim) ---
+    this.transitionTl.to(pp.exposure, { value: 0.7, duration: 0.4, ease: 'power2.inOut' }, 0);
+    this.transitionTl.to(pp.exposure, { value: 1.0, duration: 0.8, ease: 'expo.out' }, 0.45);
 
-    // Chromatic aberration spike
-    this.transitionTl.to(pp.chromaticAberration, {
-      value: 0.025,
-      duration: 0.12,
-      ease: 'power4.in',
-    }, 0);
+    // --- Tiny CA for elegance ---
+    this.transitionTl.to(pp.chromaticAberration, { value: 0.008, duration: 0.3, ease: 'power2.in' }, 0);
+    this.transitionTl.to(pp.chromaticAberration, { value: 0.003, duration: 0.8, ease: 'expo.out' }, 0.4);
 
-    // Bloom burst
-    this.transitionTl.to(pp.bloomStrength, {
-      value: 1.0,
-      duration: 0.15,
-      ease: 'power3.in',
-    }, 0);
-
-    // Vignette tightens
-    this.transitionTl.to(pp.vignetteIntensity, {
-      value: 3.5,
-      duration: 0.3,
-      ease: 'power2.in',
-    }, 0);
-
-    // --- PHASE 2: Exposure dip (0.05s–0.5s) ---
-    this.transitionTl.to(pp.exposure, {
-      value: 0.15,
-      duration: 0.4,
-      ease: 'power3.in',
-    }, 0.05);
-
-    // Glitch ramp down through phases
-    this.transitionTl.call(() => pp.setGlitch(0.8), [], 0.1);
-    this.transitionTl.call(() => pp.setGlitch(0.4), [], 0.2);
-    this.transitionTl.call(() => pp.setGlitch(0.15), [], 0.35);
-    this.transitionTl.call(() => pp.setGlitch(0), [], 0.55);
-
-    // Old screen: fast out with scale + filter
+    // --- Old screen: gentle fade out ---
     if (fromScreen) {
       this.transitionTl.to(fromScreen, {
         opacity: 0,
-        scale: 0.97,
-        filter: 'blur(6px)',
-        duration: 0.35,
-        ease: 'power3.in',
+        y: -20,
+        filter: 'blur(8px)',
+        duration: 0.5,
+        ease: 'power2.in',
         onComplete: () => {
           fromScreen.classList.remove('active');
-          gsap.set(fromScreen, { scale: 1, filter: 'none' });
+          gsap.set(fromScreen, { y: 0, filter: 'none' });
         },
       }, 0);
     }
 
-    // --- PHASE 3: Exposure recovery + new screen (0.5s) ---
-    this.transitionTl.to(pp.exposure, {
-      value: 1.3,  // brief flash overshoot
-      duration: 0.3,
-      ease: 'power2.out',
-    }, 0.5);
-    this.transitionTl.to(pp.exposure, {
-      value: 1.0,  // settle to baseline
-      duration: 0.6,
-      ease: 'expo.out',
-    }, 0.8);
-
-    // Bloom settle
-    this.transitionTl.to(pp.bloomStrength, {
-      value: 0.5,
-      duration: 0.8,
-      ease: 'expo.out',
-    }, 0.4);
-
-    // CA settle
-    this.transitionTl.to(pp.chromaticAberration, {
-      value: 0.003,
-      duration: 1.0,
-      ease: 'expo.out',
-    }, 0.4);
-
-    // Vignette settle
-    this.transitionTl.to(pp.vignetteIntensity, {
-      value: 2.2,
-      duration: 1.0,
-      ease: 'expo.out',
-    }, 0.5);
-
-    // New screen appears
+    // --- New screen: elegant entrance ---
     if (toScreen) {
       this.transitionTl.call(() => {
         toScreen.classList.add('active');
-        gsap.set(toScreen, { opacity: 0, scale: 1.04, filter: 'blur(4px)' });
-      }, [], 0.5);
+        gsap.set(toScreen, { opacity: 0, y: 30, filter: 'blur(6px)' });
+      }, [], 0.4);
 
       this.transitionTl.to(toScreen, {
         opacity: 1,
-        scale: 1,
+        y: 0,
         filter: 'blur(0px)',
-        duration: 0.7,
+        duration: 0.8,
         ease: 'expo.out',
-      }, 0.55);
+      }, 0.45);
 
-      // --- PHASE 4: Element stagger (0.8s) ---
       this.transitionTl.call(() => {
         this._animateScreenElements(toScreen, to);
-      }, [], 0.7);
+      }, [], 0.6);
     }
-
-    // --- One more glitch flicker at the end for texture ---
-    this.transitionTl.call(() => pp.setGlitch(0.2), [], 0.9);
-    this.transitionTl.call(() => pp.setGlitch(0), [], 1.05);
   }
 
   _animateScreenElements(screen, state) {
@@ -340,21 +247,17 @@ class UIController {
 
     gsap.fromTo(elements,
       {
-        y: 50,
+        y: 30,
         opacity: 0,
-        scale: 0.95,
-        rotateX: 4,
-        filter: 'blur(8px)',
+        filter: 'blur(4px)',
       },
       {
         y: 0,
         opacity: 1,
-        scale: 1,
-        rotateX: 0,
         filter: 'blur(0px)',
-        duration: 1.0,
-        ease: 'expo.out',
-        stagger: 0.07,
+        duration: 0.9,
+        ease: 'power3.out',
+        stagger: 0.08,
       }
     );
 
