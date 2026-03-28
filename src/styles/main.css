@@ -518,6 +518,7 @@ html, body {
   width: 100%;
   max-width: 900px;
   padding: 80px 40px 40px;
+  pointer-events: auto;
 }
 
 .hub-grid {
