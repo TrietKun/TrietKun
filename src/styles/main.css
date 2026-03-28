@@ -364,6 +364,13 @@ html, body {
   padding: 0 20px;
   max-width: 100%;
   pointer-events: auto;
+  z-index: 2;
+}
+
+.intro-cta {
+  pointer-events: auto;
+  position: relative;
+  z-index: 5;
 }
 
 .intro-title {
@@ -1963,17 +1970,21 @@ html, body {
     padding-bottom: env(safe-area-inset-bottom, 0px);
   }
 
+  /* Logo becomes first tab in bottom bar on mobile */
   .nav-logo {
-    position: fixed;
-    top: 12px;
-    left: 16px;
-    z-index: 200;
-    font-size: 18px;
-    letter-spacing: 3px;
-    padding: 12px 8px;
+    position: static;
+    font-size: 12px;
+    letter-spacing: 2px;
+    padding: 14px 8px;
     pointer-events: auto;
     min-height: 48px;
     min-width: 48px;
+    flex: 1;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    order: -1;
   }
 
   .nav-items {
@@ -2003,9 +2014,14 @@ html, body {
 
   .nav-indicator { display: none; }
 
-  /* Intro */
+  /* Intro — move content up to avoid bottom nav overlap */
+  #screen-intro {
+    padding-bottom: 80px;
+  }
+
   .intro-content {
     padding: 0 20px;
+    margin-top: -40px;
   }
 
   .intro-line {
@@ -2014,23 +2030,24 @@ html, body {
   }
 
   .intro-title {
-    margin-bottom: 20px;
+    margin-bottom: 16px;
   }
 
   .intro-subtitle {
     font-size: 11px;
     letter-spacing: 2px;
-    margin-bottom: 32px;
+    margin-bottom: 24px;
   }
 
   .cta-button {
-    padding: 16px 32px;
-    font-size: 11px;
+    padding: 18px 36px;
+    font-size: 12px;
     letter-spacing: 2px;
+    min-height: 52px;
   }
 
   .intro-scroll-hint {
-    bottom: -60px;
+    display: none;
   }
 
   /* Hub */
