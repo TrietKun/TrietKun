@@ -11,9 +11,9 @@ const GREEN = '#00FF88';
 const WHITE = '#fff';
 
 // Physics
-const GRAVITY = 0.6;
-const JUMP_FORCE = -9.5;
-const HOLD_FORCE = -0.3; // slight extra lift while holding
+const GRAVITY = 0.55;
+const JUMP_FORCE = -10;
+const HOLD_FORCE = -0.4; // stronger hold = higher jump
 const GROUND_Y_RATIO = 0.75; // ground at 75% of screen height
 const BASE_SPEED = 4;
 const MAX_SPEED = 10;
@@ -216,13 +216,13 @@ class CyberSwarm {
     let obs;
 
     if (type === 'wall') {
-      const h = rand(40, 80);
+      const h = rand(30, 60);
       obs = { type, x: this.W + 20, y: this.groundY - h, w: 28, h, damage: 1 };
     } else if (type === 'spike') {
       obs = { type, x: this.W + 20, y: this.groundY - 22, w: 32, h: 22, damage: 2 };
     } else {
-      // Laser beam — tall thin wall
-      const h = rand(70, 140);
+      // Laser beam — max height = jumpable
+      const h = rand(50, 90);
       obs = { type, x: this.W + 20, y: this.groundY - h, w: 12, h, damage: 1, phase: rand(0, Math.PI * 2) };
     }
     this.obstacles.push(obs);
