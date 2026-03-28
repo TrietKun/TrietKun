@@ -344,6 +344,10 @@ html, body {
 
 .screen.active {
   opacity: 1;
+  pointer-events: auto !important;
+}
+
+.screen.active * {
   pointer-events: auto;
 }
 
