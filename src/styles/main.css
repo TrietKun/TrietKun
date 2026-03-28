@@ -239,8 +239,13 @@ html, body {
   color: var(--color-primary);
   cursor: none;
   position: relative;
-  padding: 12px 4px;
+  padding: 12px 8px;
   text-shadow: 0 0 15px rgba(0, 212, 255, 0.4);
+  pointer-events: auto;
+  min-height: 44px;
+  min-width: 44px;
+  display: flex;
+  align-items: center;
 }
 
 .nav-logo::after {
@@ -358,6 +363,7 @@ html, body {
   position: relative;
   padding: 0 20px;
   max-width: 100%;
+  pointer-events: auto;
 }
 
 .intro-title {
@@ -444,6 +450,7 @@ html, body {
   overflow: hidden;
   transition: all 0.4s var(--ease-out-expo);
   backdrop-filter: blur(16px);
+  pointer-events: auto;
 }
 
 .cta-button::before {
@@ -681,6 +688,7 @@ html, body {
   max-width: 1000px;
   padding: 100px 40px 120px;
   align-self: flex-start;
+  pointer-events: auto;
 }
 
 .section-header {
@@ -710,12 +718,14 @@ html, body {
   align-items: center;
   gap: 8px;
   margin-top: 48px;
-  padding: 12px 24px;
+  padding: 14px 28px;
   background: var(--color-glass);
   border: 1px solid var(--color-glass-border);
   color: var(--color-text-dim);
   font-family: var(--font-mono);
   font-size: 11px;
+  pointer-events: auto;
+  min-height: 44px;
   letter-spacing: 2px;
   cursor: none;
   transition: all 0.3s var(--ease-out-expo);
@@ -1957,10 +1967,13 @@ html, body {
     position: fixed;
     top: 12px;
     left: 16px;
-    z-index: 101;
+    z-index: 200;
     font-size: 18px;
     letter-spacing: 3px;
-    padding: 8px 4px;
+    padding: 12px 8px;
+    pointer-events: auto;
+    min-height: 48px;
+    min-width: 48px;
   }
 
   .nav-items {

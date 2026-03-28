@@ -70,6 +70,10 @@ class ProjectsExperience {
     this.detailPanels.forEach((p) => p.classList.remove('active'));
     detail.classList.add('active');
 
+    // Scroll detail container to top
+    const detailContainer = detail.querySelector('.project-detail-container');
+    if (detailContainer) detailContainer.scrollTop = 0;
+
     // Get card position for origin animation
     const rect = cardEl.getBoundingClientRect();
     const originX = rect.left + rect.width / 2;
