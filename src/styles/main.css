@@ -2321,9 +2321,10 @@ html, body {
     margin-bottom: 60px;
   }
 
-  /* Sound toggle — above bottom nav */
+  /* Sound toggle — move to top-right on mobile */
   #sound-toggle {
-    bottom: 70px;
+    bottom: auto;
+    top: 12px;
     right: 12px;
   }
 
