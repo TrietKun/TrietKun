@@ -1,0 +1,830 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, interactive-widget=resizes-content" />
+  <title>TRIET TRUONG — Digital Experience</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/src/styles/main.css">
+</head>
+<body>
+  <canvas id="webgl-canvas"></canvas>
+
+  <!-- Scroll Progress Bar -->
+  <div id="scroll-progress"></div>
+
+  <!-- Matrix Rain Easter Egg Container -->
+  <div id="matrix-rain"></div>
+
+  <!-- Keyboard Hints -->
+  <div id="keyboard-hint">
+    <div class="key-hint"><kbd>1</kbd>–<kbd>4</kbd> Navigate</div>
+    <div class="key-hint"><kbd>0</kbd> Hub</div>
+  </div>
+
+  <!-- Idle Attract Mode Canvas -->
+  <div id="idle-overlay"><canvas id="idle-canvas"></canvas></div>
+
+  <!-- Ambient CSS Floating Particles -->
+  <div class="ambient-particles" id="ambient-particles"></div>
+
+  <!-- Loading Screen -->
+  <div id="loader">
+    <div class="loader-content">
+      <div class="loader-bar-container">
+        <div class="loader-bar"></div>
+      </div>
+      <div class="loader-text">INITIALIZING EXPERIENCE</div>
+      <div class="loader-percent">0%</div>
+    </div>
+  </div>
+
+  <!-- UI Overlay -->
+  <div id="ui-overlay">
+    <!-- Navigation -->
+    <nav id="nav">
+      <div class="nav-logo" data-state="INTRO" data-cursor-label="HOME">TT</div>
+      <div class="nav-items">
+        <button class="nav-item" data-state="ABOUT" data-cursor-label="ABOUT ME">ABOUT</button>
+        <button class="nav-item" data-state="PROJECTS" data-cursor-label="MY WORK">PROJECTS</button>
+        <button class="nav-item" data-state="SKILLS" data-cursor-label="TECH STACK">SKILLS</button>
+        <button class="nav-item" data-state="CONTACT" data-cursor-label="GET IN TOUCH">CONTACT</button>
+      </div>
+      <div class="nav-indicator"></div>
+    </nav>
+
+    <!-- Intro Screen -->
+    <div id="screen-intro" class="screen active">
+      <div class="intro-content">
+        <h1 class="intro-title">
+          <span class="intro-line" data-glitch="TRIET">TRIET</span>
+          <span class="intro-line" data-glitch="TRUONG">TRUONG</span>
+        </h1>
+        <p class="intro-greeting" id="greeting"></p>
+        <p class="intro-subtitle">Mobile Developer | Flutter & React Native</p>
+        <div class="intro-cta">
+          <button class="cta-button" data-state="MAIN_HUB" data-cursor-label="EXPLORE">
+            <span class="cta-text">ENTER EXPERIENCE</span>
+            <span class="cta-arrow">→</span>
+          </button>
+        </div>
+      </div>
+      <div class="intro-scroll-hint">
+        <div class="scroll-line"></div>
+      </div>
+    </div>
+
+    <!-- Main Hub -->
+    <div id="screen-main_hub" class="screen">
+      <div class="hub-content">
+        <div class="hub-grid">
+          <div class="hub-card" data-state="ABOUT" data-cursor-label="DISCOVER">
+            <div class="hub-card-icon">01</div>
+            <div class="hub-card-label">ABOUT</div>
+            <div class="hub-card-line"></div>
+          </div>
+          <div class="hub-card" data-state="PROJECTS" data-cursor-label="VIEW WORK">
+            <div class="hub-card-icon">02</div>
+            <div class="hub-card-label">PROJECTS</div>
+            <div class="hub-card-line"></div>
+          </div>
+          <div class="hub-card" data-state="SKILLS" data-cursor-label="EXPLORE">
+            <div class="hub-card-icon">03</div>
+            <div class="hub-card-label">SKILLS</div>
+            <div class="hub-card-line"></div>
+          </div>
+          <div class="hub-card" data-state="CONTACT" data-cursor-label="CONNECT">
+            <div class="hub-card-icon">04</div>
+            <div class="hub-card-label">CONTACT</div>
+            <div class="hub-card-line"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- About Screen — Immersive Scene Experience -->
+    <div id="screen-about" class="screen">
+      <div class="about-experience">
+        <!-- Ambient glow layer -->
+        <div class="about-glow-layer"></div>
+
+        <!-- Decorative floating lines -->
+        <div class="about-deco about-deco-line about-deco-1"></div>
+        <div class="about-deco about-deco-line about-deco-2"></div>
+        <div class="about-deco about-deco-ring about-deco-3"></div>
+        <div class="about-deco about-deco-dot about-deco-4"></div>
+        <div class="about-deco about-deco-dot about-deco-5"></div>
+
+        <!-- Scene navigation dots -->
+        <div class="about-scene-nav">
+          <button class="scene-dot active" data-scene="0"></button>
+          <button class="scene-dot" data-scene="1"></button>
+          <button class="scene-dot" data-scene="2"></button>
+          <button class="scene-dot" data-scene="3"></button>
+          <div class="scene-progress"></div>
+        </div>
+
+        <!-- Scene 0: WHO I AM -->
+        <div class="about-scene active" data-scene="0">
+          <div class="scene-label">01 — WHO I AM</div>
+          <h2 class="scene-headline" data-reveal>Truong Binh Triet</h2>
+          <div class="scene-divider"></div>
+          <p class="scene-body" data-reveal>Software Engineering student at the Industrial University of Ho Chi Minh City, graduating 2025. A builder at heart — driven by curiosity and craft.</p>
+          <div class="scene-tag">IUH — Software Engineering</div>
+        </div>
+
+        <!-- Scene 1: WHAT I DO -->
+        <div class="about-scene" data-scene="1">
+          <div class="scene-label">02 — WHAT I DO</div>
+          <h2 class="scene-headline" data-reveal>Flutter & IoT</h2>
+          <div class="scene-divider"></div>
+          <p class="scene-body" data-reveal>I build cross-platform mobile apps with Flutter and React Native — from IoT dashboards to social platforms and banking apps. Real-time systems, clean architecture, shipped to production.</p>
+          <div class="scene-tech-row">
+            <span class="scene-tech-chip">Flutter</span>
+            <span class="scene-tech-chip">Dart</span>
+            <span class="scene-tech-chip">React Native</span>
+            <span class="scene-tech-chip">Firebase</span>
+            <span class="scene-tech-chip">ESP32</span>
+            <span class="scene-tech-chip">MQTT</span>
+          </div>
+        </div>
+
+        <!-- Scene 2: MY JOURNEY -->
+        <div class="about-scene" data-scene="2">
+          <div class="scene-label">03 — MY JOURNEY</div>
+          <h2 class="scene-headline" data-reveal>Building Real Products</h2>
+          <div class="scene-divider"></div>
+          <div class="scene-timeline">
+            <div class="timeline-item">
+              <div class="timeline-marker"></div>
+              <div class="timeline-content">
+                <div class="timeline-period">06/2025 — 09/2025</div>
+                <div class="timeline-role">DevStation — Mobile Developer Intern</div>
+                <div class="timeline-desc">Smart Farm IoT: real-time telemetry, ESP32 firmware, ThingsBoard integration, scalable device hierarchy.</div>
+              </div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-marker"></div>
+              <div class="timeline-content">
+                <div class="timeline-period">08/2024 — 05/2025</div>
+                <div class="timeline-role">Digital for Life — Mobile Developer Intern</div>
+                <div class="timeline-desc">SOD features, state flow optimization, build stability improvements across Android & iOS.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Scene 3: MY VISION -->
+        <div class="about-scene" data-scene="3">
+          <div class="scene-label">04 — MY VISION</div>
+          <h2 class="scene-headline scene-headline-glow" data-reveal>Bridging Worlds</h2>
+          <div class="scene-divider"></div>
+          <p class="scene-body scene-body-large" data-reveal>I believe technology should be invisible — seamlessly connecting the physical and digital. Clean architecture, intuitive interfaces, and systems that just work.</p>
+          <div class="scene-signature">
+            <span class="signature-line"></span>
+            <span class="signature-text">Triet Truong — 2025</span>
+          </div>
+        </div>
+
+        <!-- Scene controls -->
+        <div class="about-controls">
+          <button class="about-prev-btn" data-cursor-label="PREVIOUS">←</button>
+          <div class="about-scene-counter">
+            <span class="scene-current">01</span>
+            <span class="scene-sep">/</span>
+            <span class="scene-total">04</span>
+          </div>
+          <button class="about-next-btn" data-cursor-label="NEXT">→</button>
+        </div>
+
+        <button class="back-button about-back" data-state="MAIN_HUB" data-cursor-label="GO BACK">← BACK TO HUB</button>
+      </div>
+    </div>
+
+    <!-- Projects Screen -->
+    <div id="screen-projects" class="screen">
+      <div class="section-content projects-content">
+        <div class="section-header">
+          <span class="section-number">02</span>
+          <h2 class="section-title">PROJECTS</h2>
+        </div>
+        <div class="projects-grid">
+          <div class="project-card" data-project="smartfarm" data-cursor-label="VIEW PROJECT">
+            <div class="project-card-inner">
+              <div class="project-card-shine"></div>
+              <div class="project-index">001</div>
+              <div class="project-status"><span class="status-dot live"></span>INTERNSHIP</div>
+              <h3 class="project-name">Smart Farm IoT</h3>
+              <p class="project-desc">Real-time IoT agriculture monitoring — sensor telemetry, ESP32 firmware, scalable Farm-Zone-Device hierarchy with ThingsBoard platform.</p>
+              <div class="project-tags">
+                <span>Flutter</span><span>ESP32</span><span>ThingsBoard</span><span>MQTT</span>
+              </div>
+              <div class="project-card-arrow">→</div>
+            </div>
+            <div class="project-glow"></div>
+          </div>
+          <div class="project-card" data-project="todolist" data-cursor-label="VIEW PROJECT">
+            <div class="project-card-inner">
+              <div class="project-card-shine"></div>
+              <div class="project-index">002</div>
+              <div class="project-status"><span class="status-dot"></span>PERSONAL</div>
+              <h3 class="project-name">Todo List Riverpod</h3>
+              <p class="project-desc">Full-featured task manager with Riverpod state, real-time WebSocket sync, push notifications via Firebase FCM, and Cloudinary image optimization.</p>
+              <div class="project-tags">
+                <span>Flutter</span><span>Riverpod</span><span>WebSocket</span><span>Firebase</span>
+              </div>
+              <div class="project-card-arrow">→</div>
+            </div>
+            <div class="project-glow"></div>
+          </div>
+          <div class="project-card" data-project="dateplanning" data-cursor-label="VIEW PROJECT">
+            <div class="project-card-inner">
+              <div class="project-card-shine"></div>
+              <div class="project-index">003</div>
+              <div class="project-status"><span class="status-dot"></span>PERSONAL</div>
+              <h3 class="project-name">DatePlanning App</h3>
+              <p class="project-desc">Couple date planning with location-based suggestions via OpenStreetMap, real-time chat, venue recommendations, and a digital love journal.</p>
+              <div class="project-tags">
+                <span>Flutter</span><span>Firebase</span><span>OpenStreetMap</span>
+              </div>
+              <div class="project-card-arrow">→</div>
+            </div>
+            <div class="project-glow"></div>
+          </div>
+          <div class="project-card" data-project="betacinemas" data-cursor-label="VIEW PROJECT">
+            <div class="project-card-inner">
+              <div class="project-card-shine"></div>
+              <div class="project-index">004</div>
+              <div class="project-status"><span class="status-dot"></span>PERSONAL</div>
+              <h3 class="project-name">BetaCinemas</h3>
+              <p class="project-desc">Cinema ticket booking — browse movies, select showtimes, pick seats with interactive map, and complete payment. Full booking flow.</p>
+              <div class="project-tags">
+                <span>Flutter</span><span>Dart</span><span>REST API</span><span>UI/UX</span>
+              </div>
+              <div class="project-card-arrow">→</div>
+            </div>
+            <div class="project-glow"></div>
+          </div>
+          <div class="project-card" data-project="secom" data-cursor-label="VIEW PROJECT">
+            <div class="project-card-inner">
+              <div class="project-card-shine"></div>
+              <div class="project-index">005</div>
+              <div class="project-status"><span class="status-dot live"></span>PUBLISHED</div>
+              <h3 class="project-name">SeCom</h3>
+              <p class="project-desc">Social networking platform — real-time messaging, content sharing, user profiles. Published on both Play Store & App Store.</p>
+              <div class="project-tags">
+                <span>React Native</span><span>Firebase</span><span>Redux</span>
+              </div>
+              <div class="project-card-arrow">→</div>
+            </div>
+            <div class="project-glow"></div>
+          </div>
+          <div class="project-card" data-project="agribank" data-cursor-label="VIEW PROJECT">
+            <div class="project-card-inner">
+              <div class="project-card-shine"></div>
+              <div class="project-index">006</div>
+              <div class="project-status"><span class="status-dot"></span>PERSONAL</div>
+              <h3 class="project-name">Agribank Mobile</h3>
+              <p class="project-desc">Mobile banking — account management, money transfers, bill payments, and online savings. Full financial management solution.</p>
+              <div class="project-tags">
+                <span>React Native</span><span>Redux</span><span>JavaScript</span>
+              </div>
+              <div class="project-card-arrow">→</div>
+            </div>
+            <div class="project-glow"></div>
+          </div>
+        </div>
+        <button class="back-button" data-state="MAIN_HUB" data-cursor-label="GO BACK">← BACK</button>
+      </div>
+
+      <!-- PROJECT DETAIL OVERLAY -->
+      <div id="project-detail-overlay">
+        <div class="project-detail-backdrop"></div>
+
+        <!-- Smart Farm IoT -->
+        <div class="project-detail" data-project="smartfarm">
+          <div class="project-detail-container">
+            <div class="pd-glow"></div>
+            <div class="pd-header">
+              <div class="pd-number">001</div>
+              <h2 class="pd-title">Smart Farm IoT</h2>
+              <p class="pd-subtitle">Real-time IoT Monitoring Platform for Smart Agriculture</p>
+              <div class="pd-meta">
+                <span class="pd-meta-item"><span class="pd-meta-icon">⚡</span> DevStation Internship</span>
+                <span class="pd-meta-item"><span class="pd-meta-icon">📅</span> Jun – Sep 2025</span>
+                <span class="pd-meta-item"><span class="pd-meta-icon">👥</span> Team Project</span>
+              </div>
+            </div>
+            <div class="pd-body">
+              <div class="pd-section">
+                <h3 class="pd-section-title">OVERVIEW</h3>
+                <p class="pd-text">A comprehensive IoT monitoring application for smart agriculture. Built during my internship at DevStation, this system enables real-time telemetry control of agricultural sensors through a scalable Farm → Zone → Device hierarchy. The ESP32 firmware communicates with ThingsBoard via MQTT for RPC commands and telemetry data streaming.</p>
+              </div>
+              <div class="pd-section">
+                <h3 class="pd-section-title">KEY FEATURES</h3>
+                <ul class="pd-features">
+                  <li class="pd-feature">Real-time sensor telemetry dashboard with live data visualization</li>
+                  <li class="pd-feature">Scalable Farm → Zone → Device management hierarchy</li>
+                  <li class="pd-feature">ESP32 firmware with MQTT protocol for bidirectional communication</li>
+                  <li class="pd-feature">ThingsBoard RPC commands for remote device control</li>
+                  <li class="pd-feature">Alert system for abnormal sensor readings</li>
+                  <li class="pd-feature">Historical data charts and analytics</li>
+                  <li class="pd-feature">Multi-farm support with role-based access</li>
+                </ul>
+              </div>
+              <div class="pd-section">
+                <h3 class="pd-section-title">TECH STACK</h3>
+                <div class="pd-tech-grid">
+                  <span class="pd-tech-tag" data-category="mobile">Flutter</span>
+                  <span class="pd-tech-tag" data-category="mobile">Dart</span>
+                  <span class="pd-tech-tag" data-category="iot">ESP32</span>
+                  <span class="pd-tech-tag" data-category="iot">MQTT</span>
+                  <span class="pd-tech-tag" data-category="platform">ThingsBoard</span>
+                  <span class="pd-tech-tag" data-category="backend">REST API</span>
+                  <span class="pd-tech-tag" data-category="iot">Telemetry</span>
+                  <span class="pd-tech-tag" data-category="iot">RPC</span>
+                </div>
+              </div>
+              <div class="pd-section">
+                <h3 class="pd-section-title">ARCHITECTURE</h3>
+                <div class="pd-architecture">
+                  <div class="pd-arch-node">
+                    <div class="pd-arch-icon">📱</div>
+                    <div class="pd-arch-label">Flutter App</div>
+                  </div>
+                  <div class="pd-arch-arrow">⟶</div>
+                  <div class="pd-arch-node">
+                    <div class="pd-arch-icon">☁️</div>
+                    <div class="pd-arch-label">ThingsBoard</div>
+                  </div>
+                  <div class="pd-arch-arrow">⟶</div>
+                  <div class="pd-arch-node">
+                    <div class="pd-arch-icon">🔌</div>
+                    <div class="pd-arch-label">MQTT Broker</div>
+                  </div>
+                  <div class="pd-arch-arrow">⟶</div>
+                  <div class="pd-arch-node">
+                    <div class="pd-arch-icon">🔧</div>
+                    <div class="pd-arch-label">ESP32 Devices</div>
+                  </div>
+                </div>
+              </div>
+              <div class="pd-links">
+                <a href="https://github.com/TrietKun/smart-farm-iot" target="_blank" rel="noopener" class="pd-link" data-cursor-label="GITHUB">
+                  <span class="pd-link-icon">⟁</span> View on GitHub
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Todo List Riverpod -->
+        <div class="project-detail" data-project="todolist">
+          <div class="project-detail-container">
+            <div class="pd-glow"></div>
+            <div class="pd-header">
+              <div class="pd-number">002</div>
+              <h2 class="pd-title">Todo List Riverpod</h2>
+              <p class="pd-subtitle">Advanced Task Management with Real-time Sync</p>
+              <div class="pd-meta">
+                <span class="pd-meta-item"><span class="pd-meta-icon">🚀</span> Personal Project</span>
+                <span class="pd-meta-item"><span class="pd-meta-icon">📄</span> MIT License</span>
+                <span class="pd-meta-item"><span class="pd-meta-icon">📱</span> 8 Screens</span>
+              </div>
+            </div>
+            <div class="pd-body">
+              <div class="pd-section">
+                <h3 class="pd-section-title">OVERVIEW</h3>
+                <p class="pd-text">A feature-rich task management application showcasing clean architecture with Riverpod state management. Features real-time synchronization via WebSocket, push notifications through Firebase Cloud Messaging, and efficient media handling with Cloudinary. Includes comprehensive user flows — Login, Tasks, Friends, Admin, Settings, Notifications, Discovery, and Chat screens.</p>
+              </div>
+              <div class="pd-section">
+                <h3 class="pd-section-title">KEY FEATURES</h3>
+                <ul class="pd-features">
+                  <li class="pd-feature">Riverpod state management with clean architecture pattern</li>
+                  <li class="pd-feature">Real-time task sync via WebSocket connections</li>
+                  <li class="pd-feature">Push notifications with Firebase Cloud Messaging (FCM)</li>
+                  <li class="pd-feature">Image upload & optimization through Cloudinary CDN</li>
+                  <li class="pd-feature">Friend system with task sharing and collaboration</li>
+                  <li class="pd-feature">Admin panel for user management</li>
+                  <li class="pd-feature">Discovery feed and real-time chat</li>
+                  <li class="pd-feature">Dark/light theme with persistent settings</li>
+                </ul>
+              </div>
+              <div class="pd-section">
+                <h3 class="pd-section-title">TECH STACK</h3>
+                <div class="pd-tech-grid">
+                  <span class="pd-tech-tag" data-category="mobile">Flutter</span>
+                  <span class="pd-tech-tag" data-category="mobile">Riverpod</span>
+                  <span class="pd-tech-tag" data-category="backend">WebSocket</span>
+                  <span class="pd-tech-tag" data-category="platform">Firebase FCM</span>
+                  <span class="pd-tech-tag" data-category="platform">Cloudinary</span>
+                  <span class="pd-tech-tag" data-category="backend">REST API</span>
+                  <span class="pd-tech-tag" data-category="mobile">Dart</span>
+                </div>
+              </div>
+              <div class="pd-section">
+                <h3 class="pd-section-title">SCREENS</h3>
+                <div class="pd-screens-grid">
+                  <div class="pd-screen-item">Login</div>
+                  <div class="pd-screen-item">Tasks</div>
+                  <div class="pd-screen-item">Friends</div>
+                  <div class="pd-screen-item">Admin</div>
+                  <div class="pd-screen-item">Settings</div>
+                  <div class="pd-screen-item">Notifications</div>
+                  <div class="pd-screen-item">Discovery</div>
+                  <div class="pd-screen-item">Chat</div>
+                </div>
+              </div>
+              <div class="pd-links">
+                <a href="https://github.com/TrietKun/TodoList" target="_blank" rel="noopener" class="pd-link" data-cursor-label="GITHUB">
+                  <span class="pd-link-icon">⟁</span> View on GitHub
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- DatePlanning App -->
+        <div class="project-detail" data-project="dateplanning">
+          <div class="project-detail-container">
+            <div class="pd-glow"></div>
+            <div class="pd-header">
+              <div class="pd-number">003</div>
+              <h2 class="pd-title">DatePlanning App</h2>
+              <p class="pd-subtitle">Couple-Focused Date Planning & Love Journal</p>
+              <div class="pd-meta">
+                <span class="pd-meta-item"><span class="pd-meta-icon">💝</span> Personal Project</span>
+                <span class="pd-meta-item"><span class="pd-meta-icon">📱</span> 7 Screens</span>
+                <span class="pd-meta-item"><span class="pd-meta-icon">🗺️</span> Location-Based</span>
+              </div>
+            </div>
+            <div class="pd-body">
+              <div class="pd-section">
+                <h3 class="pd-section-title">OVERVIEW</h3>
+                <p class="pd-text">A romantic date planning application designed for couples. Features location-based venue suggestions powered by OpenStreetMap, real-time couple chat, and a digital love journal for preserving shared memories. The app helps couples discover new places, plan perfect dates, and keep a beautiful record of their journey together.</p>
+              </div>
+              <div class="pd-section">
+                <h3 class="pd-section-title">KEY FEATURES</h3>
+                <ul class="pd-features">
+                  <li class="pd-feature">Location-based date venue recommendations via OpenStreetMap</li>
+                  <li class="pd-feature">Interactive map with nearby restaurants, cafes, and attractions</li>
+                  <li class="pd-feature">Real-time couple chat with Firebase</li>
+                  <li class="pd-feature">Digital love journal for shared memories and photos</li>
+                  <li class="pd-feature">Date planning with itinerary creation</li>
+                  <li class="pd-feature">Couple profile and shared calendar</li>
+                  <li class="pd-feature">Push notifications for date reminders</li>
+                </ul>
+              </div>
+              <div class="pd-section">
+                <h3 class="pd-section-title">TECH STACK</h3>
+                <div class="pd-tech-grid">
+                  <span class="pd-tech-tag" data-category="mobile">Flutter</span>
+                  <span class="pd-tech-tag" data-category="mobile">Dart</span>
+                  <span class="pd-tech-tag" data-category="platform">Firebase</span>
+                  <span class="pd-tech-tag" data-category="platform">Firestore</span>
+                  <span class="pd-tech-tag" data-category="platform">OpenStreetMap</span>
+                  <span class="pd-tech-tag" data-category="platform">Firebase Auth</span>
+                  <span class="pd-tech-tag" data-category="platform">Cloud Storage</span>
+                </div>
+              </div>
+              <div class="pd-links">
+                <a href="https://github.com/TrietKun/DatePlanning" target="_blank" rel="noopener" class="pd-link" data-cursor-label="GITHUB">
+                  <span class="pd-link-icon">⟁</span> View on GitHub
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- BetaCinemas -->
+        <div class="project-detail" data-project="betacinemas">
+          <div class="project-detail-container">
+            <div class="pd-glow"></div>
+            <div class="pd-header">
+              <div class="pd-number">004</div>
+              <h2 class="pd-title">BetaCinemas</h2>
+              <p class="pd-subtitle">Complete Cinema Ticket Booking Experience</p>
+              <div class="pd-meta">
+                <span class="pd-meta-item"><span class="pd-meta-icon">🎬</span> Personal Project</span>
+                <span class="pd-meta-item"><span class="pd-meta-icon">🎟️</span> Full Booking Flow</span>
+                <span class="pd-meta-item"><span class="pd-meta-icon">💳</span> Payment Integration</span>
+              </div>
+            </div>
+            <div class="pd-body">
+              <div class="pd-section">
+                <h3 class="pd-section-title">OVERVIEW</h3>
+                <p class="pd-text">A cinema ticket booking application replicating the full moviegoing experience digitally. Users can browse now-showing and upcoming movies, select their preferred theater and showtime, pick seats from an interactive seat map, and complete their booking with integrated payment. Features a polished UI with smooth animations throughout the booking flow.</p>
+              </div>
+              <div class="pd-section">
+                <h3 class="pd-section-title">KEY FEATURES</h3>
+                <ul class="pd-features">
+                  <li class="pd-feature">Movie browsing with Now Showing & Coming Soon categories</li>
+                  <li class="pd-feature">Detailed movie info — trailers, cast, reviews, ratings</li>
+                  <li class="pd-feature">Theater and showtime selection</li>
+                  <li class="pd-feature">Interactive seat map with real-time availability</li>
+                  <li class="pd-feature">Complete payment and booking confirmation flow</li>
+                  <li class="pd-feature">Booking history and ticket QR codes</li>
+                  <li class="pd-feature">User authentication and profile management</li>
+                </ul>
+              </div>
+              <div class="pd-section">
+                <h3 class="pd-section-title">TECH STACK</h3>
+                <div class="pd-tech-grid">
+                  <span class="pd-tech-tag" data-category="mobile">Flutter</span>
+                  <span class="pd-tech-tag" data-category="mobile">Dart</span>
+                  <span class="pd-tech-tag" data-category="backend">REST API</span>
+                  <span class="pd-tech-tag" data-category="mobile">BLoC Pattern</span>
+                  <span class="pd-tech-tag" data-category="platform">Payment Gateway</span>
+                  <span class="pd-tech-tag" data-category="mobile">QR Generation</span>
+                </div>
+              </div>
+              <div class="pd-section">
+                <h3 class="pd-section-title">USER FLOW</h3>
+                <div class="pd-architecture">
+                  <div class="pd-arch-node">
+                    <div class="pd-arch-icon">🎬</div>
+                    <div class="pd-arch-label">Browse</div>
+                  </div>
+                  <div class="pd-arch-arrow">⟶</div>
+                  <div class="pd-arch-node">
+                    <div class="pd-arch-icon">🏢</div>
+                    <div class="pd-arch-label">Theater</div>
+                  </div>
+                  <div class="pd-arch-arrow">⟶</div>
+                  <div class="pd-arch-node">
+                    <div class="pd-arch-icon">💺</div>
+                    <div class="pd-arch-label">Seats</div>
+                  </div>
+                  <div class="pd-arch-arrow">⟶</div>
+                  <div class="pd-arch-node">
+                    <div class="pd-arch-icon">💳</div>
+                    <div class="pd-arch-label">Payment</div>
+                  </div>
+                  <div class="pd-arch-arrow">⟶</div>
+                  <div class="pd-arch-node">
+                    <div class="pd-arch-icon">🎟️</div>
+                    <div class="pd-arch-label">Ticket</div>
+                  </div>
+                </div>
+              </div>
+              <div class="pd-links">
+                <a href="https://github.com/TrietKun/BetaCinemas" target="_blank" rel="noopener" class="pd-link" data-cursor-label="GITHUB">
+                  <span class="pd-link-icon">⟁</span> View on GitHub
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SeCom -->
+        <div class="project-detail" data-project="secom">
+          <div class="project-detail-container">
+            <div class="pd-glow"></div>
+            <div class="pd-header">
+              <div class="pd-number">005</div>
+              <h2 class="pd-title">SeCom</h2>
+              <p class="pd-subtitle">Social Networking Platform — Live on App Store & Play Store</p>
+              <div class="pd-meta">
+                <span class="pd-meta-item"><span class="pd-meta-icon">🌐</span> Team Project (CNM-SeCom)</span>
+                <span class="pd-meta-item"><span class="pd-meta-icon">📦</span> 60 Commits</span>
+                <span class="pd-meta-item"><span class="pd-meta-icon">✅</span> Published</span>
+              </div>
+            </div>
+            <div class="pd-body">
+              <div class="pd-section">
+                <h3 class="pd-section-title">OVERVIEW</h3>
+                <p class="pd-text">A full-featured social networking platform built with React Native and published on both the Google Play Store and Apple App Store. Developed as a team project, SeCom enables real-time messaging, content sharing, and social interactions. Features a modern UI with smooth native performance across both iOS and Android platforms.</p>
+              </div>
+              <div class="pd-section">
+                <h3 class="pd-section-title">KEY FEATURES</h3>
+                <ul class="pd-features">
+                  <li class="pd-feature">Real-time messaging with typing indicators</li>
+                  <li class="pd-feature">Content sharing — posts, images, stories</li>
+                  <li class="pd-feature">User profiles with follow/unfollow system</li>
+                  <li class="pd-feature">News feed with algorithmic content display</li>
+                  <li class="pd-feature">Push notifications for social interactions</li>
+                  <li class="pd-feature">Published on both Play Store & App Store</li>
+                  <li class="pd-feature">Cross-platform native performance</li>
+                </ul>
+              </div>
+              <div class="pd-section">
+                <h3 class="pd-section-title">TECH STACK</h3>
+                <div class="pd-tech-grid">
+                  <span class="pd-tech-tag" data-category="mobile">React Native</span>
+                  <span class="pd-tech-tag" data-category="mobile">Redux</span>
+                  <span class="pd-tech-tag" data-category="platform">Firebase</span>
+                  <span class="pd-tech-tag" data-category="platform">Firebase Auth</span>
+                  <span class="pd-tech-tag" data-category="platform">Firestore</span>
+                  <span class="pd-tech-tag" data-category="platform">Cloud Storage</span>
+                  <span class="pd-tech-tag" data-category="mobile">JavaScript</span>
+                </div>
+              </div>
+              <div class="pd-links">
+                <a href="https://github.com/TrietKun/MobileSeCom" target="_blank" rel="noopener" class="pd-link" data-cursor-label="GITHUB">
+                  <span class="pd-link-icon">⟁</span> View on GitHub
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Agribank Mobile -->
+        <div class="project-detail" data-project="agribank">
+          <div class="project-detail-container">
+            <div class="pd-glow"></div>
+            <div class="pd-header">
+              <div class="pd-number">006</div>
+              <h2 class="pd-title">Agribank Mobile</h2>
+              <p class="pd-subtitle">Comprehensive Mobile Banking Solution</p>
+              <div class="pd-meta">
+                <span class="pd-meta-item"><span class="pd-meta-icon">🏦</span> Personal Project</span>
+                <span class="pd-meta-item"><span class="pd-meta-icon">📦</span> 41 Commits</span>
+                <span class="pd-meta-item"><span class="pd-meta-icon">🔐</span> Secure Banking</span>
+              </div>
+            </div>
+            <div class="pd-body">
+              <div class="pd-section">
+                <h3 class="pd-section-title">OVERVIEW</h3>
+                <p class="pd-text">A mobile banking application inspired by Agribank's digital banking services. Built with React Native and Redux for robust state management. Features comprehensive financial management including account overview, money transfers, bill payments, and savings management. Implements secure authentication and encrypted data handling.</p>
+              </div>
+              <div class="pd-section">
+                <h3 class="pd-section-title">KEY FEATURES</h3>
+                <ul class="pd-features">
+                  <li class="pd-feature">Account dashboard with balance overview and recent transactions</li>
+                  <li class="pd-feature">Internal and external money transfers</li>
+                  <li class="pd-feature">Bill payment — electricity, water, internet, phone</li>
+                  <li class="pd-feature">Online savings with interest rate calculator</li>
+                  <li class="pd-feature">Transaction history with search and filters</li>
+                  <li class="pd-feature">Biometric authentication (fingerprint/face)</li>
+                  <li class="pd-feature">QR code payment support</li>
+                </ul>
+              </div>
+              <div class="pd-section">
+                <h3 class="pd-section-title">TECH STACK</h3>
+                <div class="pd-tech-grid">
+                  <span class="pd-tech-tag" data-category="mobile">React Native</span>
+                  <span class="pd-tech-tag" data-category="mobile">Redux</span>
+                  <span class="pd-tech-tag" data-category="mobile">JavaScript</span>
+                  <span class="pd-tech-tag" data-category="backend">REST API</span>
+                  <span class="pd-tech-tag" data-category="platform">JWT Auth</span>
+                  <span class="pd-tech-tag" data-category="mobile">AsyncStorage</span>
+                </div>
+              </div>
+              <div class="pd-links">
+                <a href="https://github.com/TrietKun/Agribank" target="_blank" rel="noopener" class="pd-link" data-cursor-label="GITHUB">
+                  <span class="pd-link-icon">⟁</span> View on GitHub
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <button class="project-detail-close" data-cursor-label="CLOSE">✕</button>
+      </div>
+    </div>
+
+    <!-- Skills Screen -->
+    <div id="screen-skills" class="screen">
+      <div class="section-content skills-content">
+        <div class="section-header">
+          <span class="section-number">03</span>
+          <h2 class="section-title">SKILLS</h2>
+        </div>
+        <div class="skills-grid">
+          <div class="skill-node" data-skill="flutter">
+            <div class="skill-pulse"></div>
+            <span>Flutter</span>
+          </div>
+          <div class="skill-node" data-skill="dart">
+            <div class="skill-pulse"></div>
+            <span>Dart</span>
+          </div>
+          <div class="skill-node" data-skill="riverpod">
+            <div class="skill-pulse"></div>
+            <span>Riverpod</span>
+          </div>
+          <div class="skill-node" data-skill="bloc">
+            <div class="skill-pulse"></div>
+            <span>BLoC</span>
+          </div>
+          <div class="skill-node" data-skill="getx">
+            <div class="skill-pulse"></div>
+            <span>GetX</span>
+          </div>
+          <div class="skill-node" data-skill="firebase">
+            <div class="skill-pulse"></div>
+            <span>Firebase</span>
+          </div>
+          <div class="skill-node" data-skill="iot">
+            <div class="skill-pulse"></div>
+            <span>IoT</span>
+          </div>
+          <div class="skill-node" data-skill="esp32">
+            <div class="skill-pulse"></div>
+            <span>ESP32</span>
+          </div>
+          <div class="skill-node" data-skill="mqtt">
+            <div class="skill-pulse"></div>
+            <span>MQTT</span>
+          </div>
+          <div class="skill-node" data-skill="thingsboard">
+            <div class="skill-pulse"></div>
+            <span>ThingsBoard</span>
+          </div>
+          <div class="skill-node" data-skill="nodejs">
+            <div class="skill-pulse"></div>
+            <span>NodeJS</span>
+          </div>
+          <div class="skill-node" data-skill="mongodb">
+            <div class="skill-pulse"></div>
+            <span>MongoDB</span>
+          </div>
+          <div class="skill-node" data-skill="restapi">
+            <div class="skill-pulse"></div>
+            <span>REST API</span>
+          </div>
+          <div class="skill-node" data-skill="websocket">
+            <div class="skill-pulse"></div>
+            <span>Websocket</span>
+          </div>
+          <div class="skill-node" data-skill="reactnative">
+            <div class="skill-pulse"></div>
+            <span>React Native</span>
+          </div>
+          <div class="skill-node" data-skill="redux">
+            <div class="skill-pulse"></div>
+            <span>Redux</span>
+          </div>
+          <div class="skill-node" data-skill="aws">
+            <div class="skill-pulse"></div>
+            <span>AWS</span>
+          </div>
+          <div class="skill-node" data-skill="git">
+            <div class="skill-pulse"></div>
+            <span>Git</span>
+          </div>
+        </div>
+        <canvas id="skills-canvas"></canvas>
+        <button class="back-button" data-state="MAIN_HUB" data-cursor-label="GO BACK">← BACK</button>
+      </div>
+    </div>
+
+    <!-- Contact Screen -->
+    <div id="screen-contact" class="screen">
+      <div class="section-content contact-content">
+        <div class="section-header">
+          <span class="section-number">04</span>
+          <h2 class="section-title">CONTACT</h2>
+        </div>
+        <div class="terminal">
+          <div class="terminal-header">
+            <div class="terminal-dots">
+              <span></span><span></span><span></span>
+            </div>
+            <div class="terminal-title">terminal — contact</div>
+          </div>
+          <div class="terminal-body">
+            <div class="terminal-line"><span class="terminal-prompt">$</span> <span class="terminal-cmd">whoami</span></div>
+            <div class="terminal-line terminal-output">Truong Binh Triet — Mobile Developer (Flutter & React Native)</div>
+            <div class="terminal-line"><span class="terminal-prompt">$</span> <span class="terminal-cmd">cat contact.json</span></div>
+            <div class="terminal-line terminal-output">{</div>
+            <div class="terminal-line terminal-output">  "email": "truongbinhtriet110202@gmail.com",</div>
+            <div class="terminal-line terminal-output">  "phone": "0399889692",</div>
+            <div class="terminal-line terminal-output">  "github": "github.com/TrietKun",</div>
+            <div class="terminal-line terminal-output">  "location": "Q12, Ho Chi Minh City"</div>
+            <div class="terminal-line terminal-output">}</div>
+            <div class="terminal-line"><span class="terminal-prompt">$</span> <span class="terminal-cmd">cat education.txt</span></div>
+            <div class="terminal-line terminal-output">Industrial University of HCMC (IUH)</div>
+            <div class="terminal-line terminal-output">Software Engineering — 2020-2025</div>
+            <div class="terminal-line"><span class="terminal-prompt">$</span> <span class="terminal-cmd">cat experience.txt</span></div>
+            <div class="terminal-line terminal-output">DevStation — Mobile Developer Intern (06/2025–09/2025)</div>
+            <div class="terminal-line terminal-output">Digital for Life — Mobile Developer Intern (08/2024–05/2025)</div>
+            <div class="terminal-line"><span class="terminal-prompt">$</span> <span class="terminal-cursor">_</span></div>
+          </div>
+        </div>
+        <button class="back-button" data-state="MAIN_HUB" data-cursor-label="GO BACK">← BACK</button>
+      </div>
+    </div>
+
+    <!-- Sound Toggle -->
+    <button id="sound-toggle" data-cursor-label="SOUND">
+      <div class="sound-bars">
+        <span class="sound-bar"></span>
+        <span class="sound-bar"></span>
+        <span class="sound-bar"></span>
+        <span class="sound-bar"></span>
+      </div>
+    </button>
+
+    <!-- State indicator -->
+    <div id="state-indicator">
+      <span class="state-dot"></span>
+      <span class="state-label">INTRO</span>
+    </div>
+  </div>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>

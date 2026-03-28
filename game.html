@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+  <title>CYBER SWARM — Mini Game</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: #000;
+      overflow: hidden;
+      width: 100vw;
+      height: 100vh;
+      height: 100dvh;
+      font-family: 'JetBrains Mono', monospace;
+      color: #fff;
+      user-select: none;
+      -webkit-user-select: none;
+      touch-action: none;
+    }
+
+    #game-canvas {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      z-index: 0;
+      display: block;
+    }
+
+    #back-link {
+      position: fixed;
+      top: 12px; left: 12px;
+      z-index: 100;
+      font-size: 11px;
+      color: rgba(255,255,255,0.35);
+      text-decoration: none;
+      letter-spacing: 1px;
+      transition: color 0.3s;
+    }
+    #back-link:hover { color: #00D4FF; text-shadow: 0 0 8px rgba(0,212,255,0.5); }
+
+    /* HUD */
+    #hud {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 10;
+      pointer-events: none;
+      display: flex;
+      justify-content: space-between;
+      padding: 40px 20px 0;
+    }
+    #hud-score {
+      font-size: 16px;
+      font-weight: 700;
+      color: #00D4FF;
+      letter-spacing: 2px;
+      text-shadow: 0 0 10px rgba(0,212,255,0.6);
+    }
+    #hud-swarm {
+      font-size: 13px;
+      color: #7C3AED;
+      letter-spacing: 1px;
+      text-shadow: 0 0 8px rgba(124,58,237,0.5);
+    }
+    #hud-distance {
+      font-size: 12px;
+      color: rgba(255,255,255,0.5);
+      letter-spacing: 2px;
+      text-align: right;
+    }
+    #hud-high {
+      font-size: 10px;
+      color: rgba(255,255,255,0.3);
+      letter-spacing: 1px;
+      text-align: right;
+      margin-top: 4px;
+    }
+
+    /* Overlays */
+    .overlay {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      z-index: 50;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.4s ease;
+    }
+    .overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .overlay-box {
+      background: rgba(5,7,12,0.9);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(0,212,255,0.1);
+      border-radius: 16px;
+      padding: 40px 48px;
+      max-width: 420px;
+      width: 88%;
+    }
+    .overlay-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(28px, 8vw, 42px);
+      font-weight: 700;
+      letter-spacing: 4px;
+      background: linear-gradient(135deg, #00D4FF, #7C3AED, #00D4FF);
+      background-size: 200% auto;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: grad 3s ease infinite;
+      margin-bottom: 8px;
+    }
+    .overlay-subtitle {
+      font-size: 12px;
+      color: rgba(255,255,255,0.4);
+      letter-spacing: 2px;
+      margin-bottom: 28px;
+    }
+    @keyframes grad {
+      0% { background-position: 0% center; }
+      50% { background-position: 100% center; }
+      100% { background-position: 0% center; }
+    }
+    .prompt {
+      font-size: 13px;
+      color: #00D4FF;
+      letter-spacing: 3px;
+      animation: blink 2s ease-in-out infinite;
+      margin-bottom: 24px;
+    }
+    @keyframes blink { 0%,100% { opacity:1; } 50% { opacity:0.3; } }
+    .controls {
+      font-size: 10px;
+      color: rgba(255,255,255,0.3);
+      letter-spacing: 1px;
+      line-height: 2;
+    }
+    .controls span { color: rgba(255,255,255,0.55); }
+
+    /* Game Over */
+    .go-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 28px;
+      font-weight: 700;
+      color: #FF3A8C;
+      letter-spacing: 4px;
+      text-shadow: 0 0 20px rgba(255,58,140,0.5);
+      margin-bottom: 24px;
+    }
+    .stats {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 24px;
+    }
+    .stat {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      letter-spacing: 1px;
+    }
+    .stat-l { color: rgba(255,255,255,0.45); }
+    .stat-v { color: #00D4FF; font-weight: 700; text-shadow: 0 0 6px rgba(0,212,255,0.4); }
+    .stat-v.new-high { color: #00FF88; text-shadow: 0 0 6px rgba(0,255,136,0.5); }
+
+    /* Mobile */
+    @media (max-width: 600px) {
+      #hud { padding: 36px 12px 0; }
+      #hud-score { font-size: 14px; }
+      .overlay-box { padding: 28px 24px; }
+    }
+  </style>
+</head>
+<body>
+  <canvas id="game-canvas"></canvas>
+
+  <a href="/index.html" id="back-link">&larr; PORTFOLIO</a>
+
+  <div id="hud">
+    <div>
+      <div id="hud-score">0</div>
+      <div id="hud-swarm">SWARM: 1</div>
+    </div>
+    <div>
+      <div id="hud-distance">0m</div>
+      <div id="hud-high"></div>
+    </div>
+  </div>
+
+  <div id="start-screen" class="overlay active">
+    <div class="overlay-box">
+      <div class="overlay-title">CYBER<br>SWARM</div>
+      <div class="overlay-subtitle">ENDLESS RUNNER</div>
+      <div class="prompt">TAP OR PRESS SPACE</div>
+      <div class="controls">
+        <div><span>SPACE / TAP</span> — JUMP</div>
+        <div><span>HOLD</span> — HIGHER JUMP</div>
+        <div>COLLECT NODES — GROW SWARM</div>
+        <div>AVOID RED WALLS — LOSE BOTS</div>
+      </div>
+    </div>
+  </div>
+
+  <div id="game-over-screen" class="overlay">
+    <div class="overlay-box">
+      <div class="go-title">SYSTEM CRASH</div>
+      <div class="stats">
+        <div class="stat"><span class="stat-l">SCORE</span><span class="stat-v" id="go-score">0</span></div>
+        <div class="stat"><span class="stat-l">DISTANCE</span><span class="stat-v" id="go-dist">0m</span></div>
+        <div class="stat"><span class="stat-l">MAX SWARM</span><span class="stat-v" id="go-swarm">0</span></div>
+        <div class="stat"><span class="stat-l">HIGH SCORE</span><span class="stat-v" id="go-high">0</span></div>
+      </div>
+      <div class="prompt">TAP OR PRESS SPACE</div>
+    </div>
+  </div>
+
+  <script type="module" src="/src/game/CyberSwarm.js"></script>
+</body>
+</html>
