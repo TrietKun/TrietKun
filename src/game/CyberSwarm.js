@@ -88,19 +88,30 @@ class CyberSwarm {
   }
 
   _resize() {
-    this.W = window.innerWidth;
-    this.H = window.innerHeight;
+    this._updateSize();
+    window.addEventListener('resize', () => {
+      this._updateSize();
+      this._generateBuildings();
+    });
+    // Also listen for orientation change on mobile
+    window.addEventListener('orientationchange', () => {
+      setTimeout(() => { this._updateSize(); this._generateBuildings(); }, 200);
+    });
+  }
+
+  _updateSize() {
+    // If portrait on touch device, game is CSS-rotated — swap dimensions
+    const isPortraitTouch = window.matchMedia('(orientation: portrait) and (pointer: coarse)').matches;
+    if (isPortraitTouch) {
+      this.W = window.innerHeight;
+      this.H = window.innerWidth;
+    } else {
+      this.W = window.innerWidth;
+      this.H = window.innerHeight;
+    }
     this.canvas.width = this.W;
     this.canvas.height = this.H;
     this.groundY = this.H * GROUND_Y_RATIO;
-    window.addEventListener('resize', () => {
-      this.W = window.innerWidth;
-      this.H = window.innerHeight;
-      this.canvas.width = this.W;
-      this.canvas.height = this.H;
-      this.groundY = this.H * GROUND_Y_RATIO;
-      this._generateBuildings();
-    });
   }
 
   _generateBuildings() {

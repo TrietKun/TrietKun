@@ -181,61 +181,39 @@
       .overlay-box { padding: 28px 24px; }
     }
 
-    /* Portrait warning — force landscape on mobile */
-    #rotate-warning {
-      display: none;
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: #000;
-      z-index: 99999;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      gap: 20px;
-    }
-    .rotate-icon {
-      font-size: 48px;
-      animation: rotatePhone 2s ease-in-out infinite;
-    }
-    .rotate-text {
-      font-size: 14px;
-      color: #00D4FF;
-      letter-spacing: 3px;
-      text-transform: uppercase;
-    }
-    .rotate-sub {
-      font-size: 10px;
-      color: rgba(255,255,255,0.4);
-      letter-spacing: 1px;
-    }
-    @keyframes rotatePhone {
-      0%, 100% { transform: rotate(0deg); }
-      25% { transform: rotate(90deg); }
-      50%, 75% { transform: rotate(90deg); }
-    }
-    @media (orientation: portrait) and (max-height: 500px),
-           (orientation: portrait) and (pointer: coarse) {
-      #rotate-warning {
-        display: flex !important;
+    /* Force landscape on portrait mobile — rotate entire page */
+    @media (orientation: portrait) and (pointer: coarse) {
+      #game-root {
+        position: fixed;
+        top: 0;
+        left: 100%;
+        width: 100dvh;
+        height: 100dvw;
+        transform: rotate(90deg);
+        transform-origin: top left;
+        overflow: hidden;
       }
-    }
-    @media (orientation: landscape) {
-      #rotate-warning {
-        display: none !important;
+      #game-canvas {
+        position: absolute;
+        top: 0; left: 0;
+        width: 100dvh !important;
+        height: 100dvw !important;
+      }
+      #hud {
+        width: 100dvh;
+      }
+      .overlay {
+        width: 100dvh;
+        height: 100dvw;
+      }
+      #back-link {
+        display: none;
       }
     }
   </style>
 </head>
 <body>
-  <!-- Rotate screen warning for portrait -->
-  <div id="rotate-warning">
-    <div class="rotate-icon">📱</div>
-    <div class="rotate-text">ROTATE YOUR DEVICE</div>
-    <div class="rotate-sub">This game is best played in landscape mode</div>
-  </div>
-
+  <div id="game-root">
   <canvas id="game-canvas"></canvas>
 
   <a href="./index.html" id="back-link">&larr; PORTFOLIO</a>
@@ -277,6 +255,7 @@
       <div class="prompt">TAP OR PRESS SPACE</div>
     </div>
   </div>
+  </div><!-- /game-root -->
 
   <script type="module" src="/src/game/CyberSwarm.js"></script>
 </body>
