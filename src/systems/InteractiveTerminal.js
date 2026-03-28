@@ -253,7 +253,7 @@ class InteractiveTerminal {
 
       case 'play':
       case 'game':
-        window.open('/game.html', '_self');
+        window.open(import.meta.env.BASE_URL + 'game.html', '_self');
         return 'Launching CYBER SWARM...';
 
       case 'rm':
