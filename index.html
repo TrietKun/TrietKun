@@ -337,6 +337,20 @@
             </div>
             <div class="project-glow"></div>
           </div>
+          <div class="project-card" data-project="mitvsignagecast" data-cursor-label="VIEW PROJECT">
+            <div class="project-card-inner">
+              <div class="project-card-shine"></div>
+              <div class="project-index">010</div>
+              <div class="project-status"><span class="status-dot live"></span>COMPANY</div>
+              <h3 class="project-name">Mi TV Signage + Cast</h3>
+              <p class="project-desc">Native Android TV app for Xiaomi Mi TV / Mi Box — always-on kiosk signage that boots into a looping banner playlist, plus a phone→TV cast receiver (DLNA, AirPlay) with a Bluetooth companion remote.</p>
+              <div class="project-tags">
+                <span>Kotlin</span><span>Android TV</span><span>ExoPlayer</span><span>DLNA / AirPlay</span>
+              </div>
+              <div class="project-card-arrow">→</div>
+            </div>
+            <div class="project-glow"></div>
+          </div>
         </div>
         <button class="back-button" data-state="MAIN_HUB" data-cursor-label="GO BACK">← BACK</button>
       </div>
@@ -1082,6 +1096,124 @@
                   <div class="pd-arch-node">
                     <div class="pd-arch-icon">🍱</div>
                     <div class="pd-arch-label">Riverpod UI</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Mi TV Signage + Cast -->
+        <div class="project-detail" data-project="mitvsignagecast">
+          <div class="project-detail-container">
+            <div class="pd-glow"></div>
+            <div class="pd-header">
+              <div class="pd-number">010</div>
+              <h2 class="pd-title">Mi TV Signage + Cast</h2>
+              <p class="pd-subtitle">Always-on Android TV signage + multi-protocol cast receiver</p>
+              <div class="pd-meta">
+                <span class="pd-meta-item"><span class="pd-meta-icon">📺</span> Android TV / Mi Box</span>
+                <span class="pd-meta-item"><span class="pd-meta-icon">🏢</span> Workflow — Company</span>
+                <span class="pd-meta-item"><span class="pd-meta-icon">🔌</span> Kotlin + Native C/C++</span>
+              </div>
+            </div>
+            <div class="pd-body">
+              <div class="pd-section">
+                <h3 class="pd-section-title">OVERVIEW</h3>
+                <p class="pd-text">A single Android TV APK that plays two roles for Xiaomi Mi TV / Mi Box. First, an always-on digital-signage display: it boots straight into a full-screen looping playlist of banners and videos, holds the screen awake with a wake lock, and relaunches itself after a reboot — optionally taking over as the TV's HOME launcher for a true kiosk. Second, a phone → TV cast receiver: a built-in DLNA/UPnP MediaRenderer plus a native AirPlay stack let any phone on the LAN push media to the screen; the signage auto-pauses for the cast and resumes the loop when it ends. Built in Kotlin with ExoPlayer (Media3) as the display engine, a foreground service + wake lock as the always-on backbone, and an NDK/CMake native layer (libplist + OpenSSL) for AirPlay — paired with a Bluetooth companion app to drive the TV remotely.</p>
+              </div>
+              <div class="pd-section">
+                <h3 class="pd-section-title">LIVE ON SCREEN</h3>
+                <div class="pd-tv-mockup">
+                  <div class="pd-tv-screen">
+                    <div class="pd-tv-display">
+                      <img src="projects/mitvsignagecast/banner1.jpg" alt="Mi TV showing the full-screen signage banner loop" loading="lazy">
+                      <div class="pd-tv-live">ON AIR</div>
+                      <div class="pd-tv-qr">
+                        <span class="pd-tv-qr-code"></span>
+                        Scan to cast from your phone
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <p class="pd-tv-caption">// Full-screen kiosk display — boots into the loop, survives reboot, pauses for casts</p>
+              </div>
+              <div class="pd-section">
+                <h3 class="pd-section-title">SIGNAGE PLAYLIST</h3>
+                <div class="pd-tv-playlist">
+                  <div class="pd-tv-thumb">
+                    <img src="projects/mitvsignagecast/banner2.jpg" alt="Banner slide 2" loading="lazy"><span>Slide 02</span>
+                  </div>
+                  <div class="pd-tv-thumb">
+                    <img src="projects/mitvsignagecast/banner3.jpg" alt="Banner slide 3" loading="lazy"><span>Slide 03</span>
+                  </div>
+                  <div class="pd-tv-thumb">
+                    <img src="projects/mitvsignagecast/banner4.jpg" alt="Banner slide 4" loading="lazy"><span>Slide 04</span>
+                  </div>
+                  <div class="pd-tv-thumb">
+                    <img src="projects/mitvsignagecast/banner5.jpg" alt="Banner slide 5" loading="lazy"><span>Slide 05</span>
+                  </div>
+                  <div class="pd-tv-thumb">
+                    <img src="projects/mitvsignagecast/banner6.jpg" alt="Banner slide 6" loading="lazy"><span>Slide 06</span>
+                  </div>
+                  <div class="pd-tv-thumb">
+                    <img src="projects/mitvsignagecast/banner7.jpg" alt="Banner slide 7" loading="lazy"><span>Slide 07</span>
+                  </div>
+                </div>
+              </div>
+              <div class="pd-section">
+                <h3 class="pd-section-title">KEY FEATURES</h3>
+                <ul class="pd-features">
+                  <li class="pd-feature">Always-on kiosk signage — boots into a full-screen looping image + video playlist</li>
+                  <li class="pd-feature">Screen-on wake lock + foreground SignageService as the always-on backbone</li>
+                  <li class="pd-feature">Auto-relaunch after a TV reboot via BootReceiver</li>
+                  <li class="pd-feature">Optional HOME-launcher intent-filter to become the TV's launcher (true kiosk)</li>
+                  <li class="pd-feature">DLNA / UPnP MediaRenderer (jUPnP) — any "Play to / Cast" app pushes media to the TV</li>
+                  <li class="pd-feature">Native AirPlay receiver via NDK / CMake C/C++ (libplist + OpenSSL)</li>
+                  <li class="pd-feature">Signage auto-pauses for an incoming cast and resumes the loop when it ends</li>
+                  <li class="pd-feature">Bluetooth companion controller app to drive the TV remotely</li>
+                  <li class="pd-feature">JSON-driven playlist (CMS-ready) + Leanback launcher entry, sideload via ADB</li>
+                </ul>
+              </div>
+              <div class="pd-section">
+                <h3 class="pd-section-title">TECH STACK</h3>
+                <div class="pd-tech-grid">
+                  <span class="pd-tech-tag" data-category="mobile">Kotlin</span>
+                  <span class="pd-tech-tag" data-category="mobile">Android TV</span>
+                  <span class="pd-tech-tag" data-category="mobile">Leanback</span>
+                  <span class="pd-tech-tag" data-category="mobile">ExoPlayer / Media3</span>
+                  <span class="pd-tech-tag" data-category="platform">Foreground Service</span>
+                  <span class="pd-tech-tag" data-category="platform">jUPnP (DLNA)</span>
+                  <span class="pd-tech-tag" data-category="platform">NDK / CMake</span>
+                  <span class="pd-tech-tag" data-category="platform">C / C++</span>
+                  <span class="pd-tech-tag" data-category="platform">libplist</span>
+                  <span class="pd-tech-tag" data-category="platform">OpenSSL</span>
+                  <span class="pd-tech-tag" data-category="platform">Bluetooth</span>
+                  <span class="pd-tech-tag" data-category="mobile">Moshi</span>
+                  <span class="pd-tech-tag" data-category="platform">Gradle KTS</span>
+                </div>
+              </div>
+              <div class="pd-section">
+                <h3 class="pd-section-title">ARCHITECTURE</h3>
+                <div class="pd-architecture">
+                  <div class="pd-arch-node">
+                    <div class="pd-arch-icon">⚡</div>
+                    <div class="pd-arch-label">Boot / Kiosk</div>
+                  </div>
+                  <div class="pd-arch-arrow">⟶</div>
+                  <div class="pd-arch-node">
+                    <div class="pd-arch-icon">🛡️</div>
+                    <div class="pd-arch-label">SignageService + Wake Lock</div>
+                  </div>
+                  <div class="pd-arch-arrow">⟶</div>
+                  <div class="pd-arch-node">
+                    <div class="pd-arch-icon">📺</div>
+                    <div class="pd-arch-label">ExoPlayer Display Engine</div>
+                  </div>
+                  <div class="pd-arch-arrow">⟶</div>
+                  <div class="pd-arch-node">
+                    <div class="pd-arch-icon">🔌</div>
+                    <div class="pd-arch-label">DLNA / AirPlay Receivers</div>
                   </div>
                 </div>
               </div>
