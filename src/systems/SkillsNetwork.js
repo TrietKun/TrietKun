@@ -1,5 +1,5 @@
 /**
- * Draws animated connection lines between skill nodes
+ * Renders animated connection lines between skill nodes
  * on a 2D canvas overlay
  */
 class SkillsNetwork {
@@ -20,15 +20,19 @@ class SkillsNetwork {
     // Define which skills connect
     this.connectionMap = [
       ['flutter', 'dart'],
+      ['flutter', 'riverpod'],
+      ['flutter', 'gorouter'],
+      ['flutter', 'flame'],
       ['flutter', 'firebase'],
-      ['flutter', 'ble'],
-      ['dart', 'iot'],
-      ['iot', 'mqtt'],
-      ['iot', 'embedded'],
-      ['iot', 'ble'],
-      ['embedded', 'ble'],
-      ['firebase', 'mqtt'],
       ['flutter', 'git'],
+      ['kotlin', 'androidtv'],
+      ['androidtv', 'exoplayer'],
+      ['restapi', 'cloudflare'],
+      ['cloudflare', 'typescript'],
+      ['typescript', 'nextjs'],
+      ['dart', 'reactnative'],
+      ['dart', 'kotlin'],
+      ['firebase', 'restapi'],
     ];
   }
 

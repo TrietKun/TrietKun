@@ -162,35 +162,42 @@ class InteractiveTerminal {
         ];
 
       case 'whoami':
-        return 'Truong Binh Triet \u2014 Mobile Developer (Flutter & React Native)';
+        return 'Truong Binh Triet - Mobile Developer \u00B7 Flutter';
 
       case 'skills':
         return [
           'Technical Skills:',
           '  \u2022 Flutter      \u2022 Dart',
-          '  \u2022 React Native \u2022 Firebase',
-          '  \u2022 ESP32        \u2022 MQTT',
-          '  \u2022 Git          \u2022 REST API',
-          '  \u2022 WebSocket    \u2022 Riverpod',
+          '  \u2022 Riverpod     \u2022 go_router',
+          '  \u2022 Flame        \u2022 Kotlin',
+          '  \u2022 Android TV   \u2022 ExoPlayer',
+          '  \u2022 Firebase     \u2022 REST APIs',
+          '  \u2022 Cloudflare Workers',
+          '  \u2022 TypeScript   \u2022 Next.js',
+          '  \u2022 Git / GitHub Actions',
+          '  \u2022 React Native',
         ];
 
       case 'projects':
         return [
-          'Projects:',
-          '  1. Workflow App',
-          '  2. Bluetooth Scanner',
-          '  3. Smart Home IoT',
-          '  4. Portfolio Website',
-          '  5. Chat Application',
-          '  6. E-Commerce Mobile',
+          'Store apps (Triet Digital):',
+          '  1. B\u00E1 To\u00E1n 11     App Store',
+          '  2. Maneki         App Store, Google Play',
+          '  3. Washoku        App Store',
+          '  4. S\u1ED5 T\u00E0i S\u1EA3n    App Store, Google Play',
+          '',
+          'Open source:',
+          '  5. MindForge      github.com/TrietKun/Mindforge',
+          '  6. CineVerse      github.com/TrietKun/Cineverse',
+          '  7. L\u1ECBch Vi\u1EC7t      github.com/TrietKun/lich-viet',
         ];
 
       case 'contact':
         return [
           '{',
           '  "email": "truongbinhtriet110202@gmail.com",',
-          '  "phone": "+84 XXX XXX XXX",',
-          '  "github": "github.com/truongbinhtriet",',
+          '  "phone": "039 988 9692",',
+          '  "github": "github.com/TrietKun",',
           '  "location": "Ho Chi Minh City, Vietnam"',
           '}',
         ];
@@ -200,19 +207,24 @@ class InteractiveTerminal {
           'Education:',
           '  Industrial University of Ho Chi Minh City (IUH)',
           '  Software Engineering',
-          '  2020 - 2025',
+          '  2020 to 2025',
         ];
 
       case 'experience':
         return [
           'Experience:',
-          '  1. Mobile Developer Intern @ Workflow',
-          '     - Flutter & Dart development',
-          '     - IoT integration with ESP32/MQTT',
+          '  1. Workflow - Mobile Developer (10/2025 to present)',
+          '     - Customer app (Flutter) for a booking and coworking platform',
+          '     - Android TV signage and screen casting app (Kotlin)',
+          '     - Web booking site and landing pages for a booking chain',
           '',
-          '  2. Mobile Developer Intern @ Previous Company',
-          '     - React Native development',
-          '     - REST API integration',
+          '  2. DevStation - Mobile Developer Intern (06/2025 to 09/2025)',
+          '     - Smart Farm IoT: real-time telemetry, ESP32 firmware,',
+          '       ThingsBoard integration, scalable device hierarchy',
+          '',
+          '  3. Digital for Life - Mobile Developer Intern (08/2024 to 05/2025)',
+          '     - SOD features, state flow optimization, build stability',
+          '       improvements across Android & iOS',
         ];
 
       case 'clear':
@@ -227,12 +239,12 @@ class InteractiveTerminal {
 
       case 'sudo':
         if (args.join(' ').toLowerCase() === 'hire-me') {
-          return '\uD83C\uDF89 ACCESS GRANTED \u2014 Sending hire request... Just kidding! But seriously, let\'s connect: truongbinhtriet110202@gmail.com';
+          return 'ACCESS GRANTED. Sending hire request... Just kidding! But seriously, let\'s connect: truongbinhtriet110202@gmail.com';
         }
         return `Command not found: sudo ${args.join(' ')}. Type 'help' for available commands.`;
 
       case 'ls':
-        return 'about/  projects/  skills/  contact.json  education.txt  experience.txt';
+        return 'contact.json  education.txt  experience.txt';
 
       case 'cat':
         return this._handleCat(args[0]);

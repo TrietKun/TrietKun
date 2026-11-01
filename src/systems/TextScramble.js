@@ -4,7 +4,7 @@
  */
 class TextScramble {
   constructor() {
-    this.chars = '!<>-_\\/[]{}—=+*^?#_ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    this.chars = '!<>-_\\/[]{}~=+*^?#_ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
     this.queue = [];
     this.frame = 0;
     this.frameRequest = null;

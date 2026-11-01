@@ -23,21 +23,41 @@ class IdleAttract {
     this._createParticles();
     this._bindEvents();
     this._resetTimer();
+
+    // The text is sampled with the web font, so redo it once the font has loaded
+    document.fonts?.ready.then(() => this._rebuild()).catch((error) => {
+      console.error('[IdleAttract] document.fonts.ready failed', error);
+    });
+  }
+
+  _syncCanvasSize() {
+    // innerWidth/innerHeight can be 0 (hidden iframe, detached layout); a 0-sized
+    // canvas makes getImageData throw, so never go below 1px.
+    this.canvas.width = Math.max(1, window.innerWidth);
+    this.canvas.height = Math.max(1, window.innerHeight);
   }
 
   _resize() {
     if (!this.canvas) return;
-    this.canvas.width = window.innerWidth;
-    this.canvas.height = window.innerHeight;
+    this._syncCanvasSize();
     window.addEventListener('resize', () => {
-      this.canvas.width = window.innerWidth;
-      this.canvas.height = window.innerHeight;
-      this._generateTargets();
+      this._syncCanvasSize();
+      this._rebuild();
     });
+  }
+
+  _rebuild() {
+    this._generateTargets();
+    // Particles hold their own target points; only swap them while the effect is not on screen
+    if (!this.active) this._createParticles();
   }
 
   _generateTargets() {
     this.targets = [];
+    const width = this.canvas.width;
+    const height = this.canvas.height;
+    if (!(width > 0 && height > 0) || window.innerWidth <= 0) return;
+
     const text = 'TRIET';
     const fontSize = Math.min(window.innerWidth * 0.15, 150);
     const ctx = this.ctx;
@@ -50,7 +70,13 @@ class IdleAttract {
     ctx.fillStyle = '#fff';
     ctx.fillText(text, this.canvas.width / 2, this.canvas.height / 2);
 
-    const imageData = ctx.getImageData(0, 0, this.canvas.width, this.canvas.height);
+    let imageData;
+    try {
+      imageData = ctx.getImageData(0, 0, width, height);
+    } catch (error) {
+      console.error('[IdleAttract] getImageData failed', { width, height }, error);
+      return;
+    }
     const data = imageData.data;
     const step = 4; // sample every 4th pixel
 

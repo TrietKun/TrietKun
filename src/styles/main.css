@@ -962,6 +962,21 @@ html, body {
   transition: color 0.3s ease, text-shadow 0.3s ease;
 }
 
+/* GSAP leaves filter/transform on each word, which puts it on its own layer; Chromium then drops it
+   from the parent's background-clip:text mask and the headline renders half-clipped. Each word paints
+   its own gradient instead. */
+.scene-headline .reveal-word {
+  background: linear-gradient(135deg, #E0F4FF 0%, var(--color-primary) 60%, var(--color-accent) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  padding-bottom: 0.08em;
+}
+
+.scene-headline:has(.reveal-word) {
+  background: none;
+}
+
 .reveal-word:hover {
   color: var(--color-primary);
   text-shadow: 0 0 10px rgba(0, 212, 255, 0.3);
@@ -3531,3 +3546,66 @@ html, body {
 }
 
 /* Inactive screens use display:none — no pointer-events hack needed */
+
+/* ============================================
+   PORTFOLIO UPDATE: store links, notes, links in terminal
+   ============================================ */
+.pd-links {
+  flex-wrap: wrap;
+}
+
+.pd-link-store {
+  border-color: rgba(124, 58, 237, 0.35);
+  background: rgba(124, 58, 237, 0.08);
+  color: #fff;
+}
+
+.pd-link-store:hover {
+  background: rgba(124, 58, 237, 0.18);
+  border-color: rgba(124, 58, 237, 0.6);
+}
+
+.section-note {
+  margin: -28px 0 36px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 1px;
+  color: var(--color-text-dim);
+}
+
+.section-note a,
+.scene-link {
+  color: var(--color-primary);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(0, 212, 255, 0.3);
+}
+
+.terminal-output a {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-color: rgba(0, 212, 255, 0.4);
+}
+
+.terminal-output a:hover {
+  color: var(--color-primary);
+}
+
+/* ============================================
+   REDUCED MOTION
+   ============================================ */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .ambient-particles,
+  #matrix-rain {
+    display: none !important;
+  }
+}
