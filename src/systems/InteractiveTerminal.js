@@ -158,7 +158,7 @@ class InteractiveTerminal {
           '  cat [file]   View file contents',
           '  neofetch     Show system info',
           '  sudo hire-me ???',
-          '  play         Launch CYBER SWARM mini-game',
+          '  play         Launch NIGHTFALL mini-game',
         ];
 
       case 'whoami':
@@ -266,7 +266,7 @@ class InteractiveTerminal {
       case 'play':
       case 'game':
         window.open(import.meta.env.BASE_URL + 'game.html', '_self');
-        return 'Launching CYBER SWARM...';
+        return 'Launching NIGHTFALL...';
 
       case 'rm':
         if (args.join(' ') === '-rf /') {
